@@ -1,4 +1,4 @@
-use nannou::prelude::*;
+use nannou::{draw::Draw, geom::Vec2};
 
 use crate::game::{consts, utils};
 
@@ -7,7 +7,7 @@ pub struct Lines {
 }
 
 impl Lines {
-    pub fn new(number_of_lines: usize) -> Self {
+    pub fn new_random(number_of_lines: usize) -> Self {
         let (window_height_max, window_height_min) = utils::get_window_height_range();
         let (window_width_max, window_width_min) = utils::get_window_width_range();
 
@@ -26,7 +26,16 @@ impl Lines {
             lines.push(line);
         }
 
-        Lines { lines }
+        Self { lines }
+    }
+
+    pub fn new(coordinates: Vec<utils::LineVec2s>) -> Self {
+        let mut lines = Vec::with_capacity(coordinates.len());
+        for (start, end) in coordinates {
+            let line = Line::new(start, end, consts::LINE_WEIGHT);
+            lines.push(line);
+        }
+        Self { lines }
     }
 
     pub fn draw(&self, draw: &Draw) {

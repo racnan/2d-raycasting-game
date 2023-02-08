@@ -1,9 +1,15 @@
-use nannou::color;
+use nannou::{color, geom::Vec2, math::deg_to_rad};
 
 use crate::game::consts;
 
 pub type MouseXY = (f32, f32);
+pub type LineVec2s = (Vec2,Vec2);
 
+pub fn get_unit_vector_from_angle(angle: f32) -> Vec2 {
+    let angle = deg_to_rad(angle);
+    let vector = Vec2::new(angle.cos(), angle.sin());
+    vector.normalize()
+}
 pub fn get_window_height_range() -> (f32, f32) {
     let window_height = consts::WINDOW_HEIGHT as f32;
     (-(window_height / 2.0), window_height / 2.0)
