@@ -1,13 +1,13 @@
 use nannou::{draw::Draw, geom::Vec2};
 
-use crate::game::{consts, utils};
+use crate::game::{types, utils};
 
 pub struct Lines {
     lines: Vec<Line>,
 }
 
 impl Lines {
-    pub fn new_random(number_of_lines: usize) -> Self {
+    pub fn new_random(number_of_lines: usize, line_weight: f32) -> Self {
         let (window_height_max, window_height_min) = utils::get_window_height_range();
         let (window_width_max, window_width_min) = utils::get_window_width_range();
 
@@ -22,17 +22,17 @@ impl Lines {
             let start = Vec2::new(start_x, start_y);
             let end = Vec2::new(end_x, end_y);
 
-            let line = Line::new(start, end, consts::LINE_WEIGHT);
+            let line = Line::new(start, end, line_weight);
             lines.push(line);
         }
 
         Self { lines }
     }
 
-    pub fn new(coordinates: Vec<utils::LineVec2s>) -> Self {
+    pub fn new(coordinates: Vec<types::LineVec2s>, line_weight: f32) -> Self {
         let mut lines = Vec::with_capacity(coordinates.len());
         for (start, end) in coordinates {
-            let line = Line::new(start, end, consts::LINE_WEIGHT);
+            let line = Line::new(start, end, line_weight);
             lines.push(line);
         }
         Self { lines }
@@ -43,9 +43,14 @@ impl Lines {
             line.draw(draw)
         }
     }
+
+    pub fn get_lines(&self) -> &Vec<Line> {
+        &self.lines
+    }
 }
 
-struct Line {
+#[derive(Debug)]
+pub struct Line {
     start: Vec2,
     end: Vec2,
     weight: f32,
@@ -67,5 +72,9 @@ impl Line {
             .points(self.start, self.end)
             .color(self.color)
             .weight(self.weight);
+    }
+
+    pub fn get_start_and_end_vector(&self) -> types::LineVec2s {
+        (self.start, self.end)
     }
 }

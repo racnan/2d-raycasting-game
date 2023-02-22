@@ -1,6 +1,6 @@
 use nannou::draw::Draw;
 
-use crate::game::utils;
+use crate::game::{types, utils};
 
 pub struct Ball {
     radius: f32,
@@ -25,7 +25,7 @@ impl Ball {
             .y(self.position.1);
     }
 
-    pub fn update_position(&mut self, position: utils::MouseXY) {
+    pub fn update_position(&mut self, position: types::MouseXY) {
         self.position = position;
     }
 }

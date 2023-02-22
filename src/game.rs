@@ -4,12 +4,13 @@ mod ball;
 mod consts;
 mod lines;
 mod rays;
+mod types;
 mod utils;
 
 pub struct Model {
     ball: ball::Ball,
     walls: lines::Lines,
-    rays: rays::Rays
+    rays: rays::Rays,
 }
 
 pub fn model(app: &App) -> Model {
@@ -21,15 +22,15 @@ pub fn model(app: &App) -> Model {
         .unwrap();
 
     let ball = ball::Ball::new(consts::BALL_RAIDUS);
-    let walls = lines::Lines::new_random(2);
-    let rays = rays::Rays::new(4);
-    Model { ball, walls, rays}
+    let walls = lines::Lines::new_random(8, consts::WALL_WEIGHT);
+    let rays = rays::Rays::new(60);
+    Model { ball, walls, rays }
 }
 
 pub fn update(app: &App, model: &mut Model, _update: Update) {
     let mouse_xy = (app.mouse.x, app.mouse.y);
     model.ball.update_position(mouse_xy);
-    model.rays.update_rays(mouse_xy);
+    model.rays.update_rays(mouse_xy, &model.walls);
 }
 
 pub fn view(app: &App, model: &Model, frame: Frame) {
